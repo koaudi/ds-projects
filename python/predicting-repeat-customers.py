@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 from pylab import rcParams
 from settings import MAIN_DIRECTORY
 
-os.chdir(MAIN_DIRECTORY)
+os.chdir('C:/Users/KOFA-X1/Desktop/')
 os.getcwd()
 
 # Loading the CSV with pandas
