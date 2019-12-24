@@ -11,8 +11,8 @@ os.getcwd()
 # Loading the CSV with pandas
 clean_data = pd.read_csv('training_data.csv', low_memory = False, error_bad_lines = False)
 
-y = clean_data['repeat_customer'].values
-x = clean_data.drop(labels = ["repeat_customer"],axis = 1)
+y = clean_data['repeat_customer1'].values
+x = clean_data.drop(labels = ["repeat_customer1"],axis = 1)
 
 #Fit log regression to training data
 #Step 1. Let’s Import the model we want to use from sci-kit learn
