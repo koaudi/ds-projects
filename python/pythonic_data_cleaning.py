@@ -9,3 +9,12 @@ def change_quantity(data):
         data.loc[data.product_id == key, 'quantity'] = data.quantity * value
     return data
 
+#FIX DATES
+df['date'] = df['paid_date'].dt.date
+df['paid_date'].fillna(df.order_date, inplace=True)
+df['order_date'] = pd.to_datetime(df.order_date)
+df['year'] = df.paid_date.dt.to_period('A')
+df['year_month_1'] = df.order_date.dt.to_period('M')
+df['week'] = df['paid_date'].dt.to_period('W')
+df['week'] = df.week.astype(str)
+df['weekstart'], df['weekend'] = df['week'].str.split('/', 1).str
