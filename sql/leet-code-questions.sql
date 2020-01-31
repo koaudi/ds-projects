@@ -70,3 +70,23 @@ ORDER BY COUNT(h.hacker_id) DESC , h.hacker_id ASC;
 
 ### SELECTING MIN MAX IN SUBQUERY
 SELECT CITY, LENGTH(CITY) FROM STATION WHERE ID = (SELECT ID FROM STATION ORDER BY LENGTH(CITY) ASC ,CITY ASC LIMIT 1) OR ID = (SELECT ID FROM STATION ORDER BY LENGTH(CITY) DESC ,CITY ASC LIMIT 1); 
+
+
+#Selecting city bsed on first character
+
+select distinct city from station where substr(CITY,1,1) IN ('A', 'E', 'I','O','U');
+
+
+select distinct city from station where left(CITY,1) IN ('A', 'E', 'I','O','U') AND RIGHT(CITY,1) IN ('A', 'E', 'I','O','U');
+
+SELECT DISTINCT CITY FROM STATION WHERE LOWER(SUBSTR(CITY,Length(CITY),1)) NOT IN ('a','e','i','o','u')and LOWER(SUBSTR(CITY,0,1)) NOT IN ('a','e','i','o','u');
+
+
+
+# MSSQL SERVER PRINT A TRIANGLE OF *
+DECLARE @i INT = 20
+WHILE (@i > 0) 
+BEGIN
+   PRINT REPLICATE('* ', @i) 
+   SET @i = @i - 1
+END
