@@ -32,12 +32,30 @@ select
 country,
 month(timestamp),
 sum(saleValue * commissionPercent) as revenue,
-100 * (count(*) - lag(count(*), 1) over (order by month(timestamp))) / lag(count(*), 1) over (order by month(timestamp))) as growth
+100 * (count(*) - lag(count(*), 1) over (order by month(timestamp))) / lag(count(*), 1) over (order by month(timestamp))) as percent_difference
 from
 transactions
 group by
 country, month, 1;
 order by 1
+
+
+
+##QUESTION 3
+MAX(coupon_text) will select SPRINGSAVINGS since the coupon_text column is a string the max function will sort the rows alphabetically asceding and pick the last rows
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
