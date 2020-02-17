@@ -1,46 +1,48 @@
-	DROP TEMPORARY TABLE transactions;
+USE gds_dashboards;
+DROP TEMPORARY TABLE transactions;
 
-	CREATE TEMPORARY TABLE transactions (
-	    country VARCHAR(255),
-	    saleValue INT,
-	    commissionPercent DECIMAL(3,2),
-	    month VARCHAR(255)
-	);
-
-
-
-	INSERT INTO 
-	   transactions (country,saleValue,commissionPercent,month)
-	VALUES
-	     ('KENYA',100,0.25,'2019-01'),
-		 ('KENYA',200,0.25,'2019-02'),
-		 ('KENYA',300,0.25,'2019-03'),
-		 ('KENYA',400,0.25,'2019-04'),
-		 ('RWANDA',100,0.25,'2019-01'),
-		 ('RWANDA',100,0.25,'2019-02'),
-		 ('RWANDA',100,0.25,'2019-03'),
-		 ('RWANDA',100,0.25,'2019-04'),
-		 ('UGANDA',100,0.25,'2019-01'),
-		 ('UGANDA',150,0.25,'2019-02'),
-		 ('UGANDA',150,0.25,'2019-03'),
-		 ('UGANDA',150,0.25,'2019-04');
+CREATE TEMPORARY TABLE transactions (
+    country VARCHAR(255),
+    saleValue INT,
+    commissionPercent DECIMAL(3,2),
+    month VARCHAR(255)
+);
 
 
 
+INSERT INTO 
+   transactions (country,saleValue,commissionPercent,month)
+VALUES
+     ('KENYA',100,0.25,'2019-01'),
+	 ('KENYA',200,0.25,'2019-02'),
+	 ('KENYA',300,0.25,'2019-03'),
+	 ('KENYA',400,0.25,'2019-04'),
+	 ('RWANDA',100,0.25,'2019-01'),
+	 ('RWANDA',100,0.25,'2019-02'),
+	 ('RWANDA',100,0.25,'2019-03'),
+	 ('RWANDA',100,0.25,'2019-04'),
+	 ('UGANDA',100,0.25,'2019-01'),
+	 ('UGANDA',150,0.25,'2019-02'),
+	 ('UGANDA',150,0.25,'2019-03'),
+	 ('UGANDA',150,0.25,'2019-04');
 
-select a.*, CASE WHEN prev_sales > 0 THEN (sales - prev_sales) / (prev_sales) END as percent_difference
+
+
+
+SELECT A.*, CASE WHEN PREV_REVENUE > 0 THEN (REVENUE - PREV_REVENUE) / (PREV_REVENUE) END AS PERCENT_DIFFERENCE
 FROM
 (
-select 
-	country,
-	month(timestamp),
-	sum(saleValue * commissionPercent) as revenue
-	LAG(sum(saleValue * commissionPercent)) OVER (ORDER BY country, month(timestamp) ) as prev_sales
-	from
-	transactions
-	group by
-	country, month(timestamp)) a;
+SELECT 
+	COUNTRY,
+	MONTH(TIMESTAMP),
+	SUM(SALEVALUE * COMMISSIONPERCENT) AS REVENUE,
+	LAG(SUM(SALEVALUE * COMMISSIONPERCENT)) OVER (ORDER BY COUNTRY, MONTH(TIMESTAMP) ) AS PREV_REVENUE
+	FROM
+	TRANSACTIONS
+	GROUP BY
+	COUNTRY, MONTH(TIMESTAMP)) A;
 
+	
 	
 
 
