@@ -68,25 +68,39 @@ HAVING COUNT(h.hacker_id) > 1
 ORDER BY COUNT(h.hacker_id) DESC , h.hacker_id ASC;
 
 
-### SELECTING MIN MAX IN SUBQUERY
-SELECT CITY, LENGTH(CITY) FROM STATION WHERE ID = (SELECT ID FROM STATION ORDER BY LENGTH(CITY) ASC ,CITY ASC LIMIT 1) OR ID = (SELECT ID FROM STATION ORDER BY LENGTH(CITY) DESC ,CITY ASC LIMIT 1); 
+###A SUBQUERY TO GET MINIMUm
+/*
+Enter your query here.
+*/
+SELECT 
+    W.ID, WP.AGE, W.COINS_NEEDED, W.POWER
+FROM
+    WANDS W
+        JOIN
+    WANDS_PROPERTY WP ON W.CODE = WP.CODE
+WHERE
+    WP.IS_EVIL = 0
+        AND W.COINS_NEEDED = (SELECT 
+            MIN(coins_needed)
+        FROM
+            Wands w1
+                JOIN
+            WANDS_PROPERTY p1 ON (w1.code = p1.code)
+        WHERE
+            w1.power = w.power AND p1.age = WP.age)
+ORDER BY W.POWER DESC , WP.AGE DESC;
 
 
-#Selecting city bsed on first character
+#over partition by does not reduce rows just adds aggregate
+SELECT  d o
+    first_name,
+    last_name,
+    department_id, 
+    ROUND(AVG(salary) OVER (
+        PARTITION BY department_id
+    )) avg_department_salary
+FROM
+    employees;
 
-select distinct city from station where substr(CITY,1,1) IN ('A', 'E', 'I','O','U');
-
-
-select distinct city from station where left(CITY,1) IN ('A', 'E', 'I','O','U') AND RIGHT(CITY,1) IN ('A', 'E', 'I','O','U');
-
-SELECT DISTINCT CITY FROM STATION WHERE LOWER(SUBSTR(CITY,Length(CITY),1)) NOT IN ('a','e','i','o','u')and LOWER(SUBSTR(CITY,0,1)) NOT IN ('a','e','i','o','u');
-
-
-
-# MSSQL SERVER PRINT A TRIANGLE OF *
-DECLARE @i INT = 20
-WHILE (@i > 0) 
-BEGIN
-   PRINT REPLICATE('* ', @i) 
-   SET @i = @i - 1
-END
+##Suppose that a website contains two tables, the Customers table and the Orders table. Write a SQL query to find all customers who never order anything.
+select Name as Customers from Customers c left join Orders o on c.Id = o.CustomerId where o.CustomerId is null
