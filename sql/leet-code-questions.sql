@@ -104,3 +104,32 @@ FROM
 
 ##Suppose that a website contains two tables, the Customers table and the Orders table. Write a SQL query to find all customers who never order anything.
 select Name as Customers from Customers c left join Orders o on c.Id = o.CustomerId where o.CustomerId is null
+
+#Ranking scores
+https://stackoverflow.com/questions/48837762/rank-scores-leetcode-178
+select scores.Score, count(ranking.Score) as Rank
+from scores, (select distinct Score from scores) ranking
+where ranking.score>=scores.Score
+group by scores.Id
+order by scores.Score desc
+
+## Question 197 Given a Weather table, write a SQL query to find all dates' Ids with higher temperature compared to its previous (yesterday's) dates.	
+SELECT
+    weather.id AS 'Id'
+FROM
+    weather
+        JOIN
+    weather w ON DATEDIFF(weather.date, w.date) = 1
+        AND weather.Temperature > w.Temperature
+;
+
+## MODULAR
+select * from cinema where mod(id,2) > 0 and description not like '%boring%' order by rating desc;
+
+### 180 Consecutive numbers
+select distinct l1.Num as ConsecutiveNums from 
+Logs l1, logs l2, logs l3 
+where
+l1.Id = l2.id - 1 
+and l2.id = l3.id - 1
+and l1.Num = l2.Num and l2.Num = l3.Num;
