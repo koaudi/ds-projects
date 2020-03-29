@@ -126,10 +126,92 @@ FROM
 ## MODULAR
 select * from cinema where mod(id,2) > 0 and description not like '%boring%' order by rating desc;
 
-### 180 Consecutive numbers
+### 180 Consecutive numbers	
 select distinct l1.Num as ConsecutiveNums from 
 Logs l1, logs l2, logs l3 
 where
 l1.Id = l2.id - 1 
 and l2.id = l3.id - 1
 and l1.Num = l2.Num and l2.Num = l3.Num;
+
+#MAX EARNINGS HACKER RANK
+select salary*months, count(*) from employee
+where salary*months = (select max(salary*months) from employee)
+group by salary*months;
+
+
+#HACKER RANK challenges problem - https://www.hackerrank.com/challenges/challenges/problem
+/* these are the columns we want to output */
+select c.hacker_id, h.name ,count(c.hacker_id) as c_count
+
+/* this is the join we want to output them from */
+from Hackers as h
+    inner join Challenges as c on c.hacker_id = h.hacker_id
+
+/* after they have been grouped by hacker */
+group by c.hacker_id
+
+/* but we want to be selective about which hackers we output */
+/* having is required (instead of where) for filtering on groups */
+having 
+
+    /* output anyone with a count that is equal to... */
+    c_count = 
+        /* the max count that anyone has */
+        (SELECT MAX(temp1.cnt)
+        from (SELECT COUNT(hacker_id) as cnt
+             from Challenges
+             group by hacker_id
+             order by hacker_id) temp1)
+
+    /* or anyone who's count is in... */
+    or c_count in 
+        /* the set of counts... */
+        (select t.cnt
+         from (select count(*) as cnt 
+               from challenges
+               group by hacker_id) t
+         /* who's group of counts... */
+         group by t.cnt
+         /* has only one element */
+         having count(t.cnt) = 1)
+
+/* finally, the order the rows should be output */
+order by c_count DESC, c.hacker_id
+
+/* ;) */
+;
+
+
+
+## https://www.hackerrank.com/challenges/sql-projects/problem
+SELECT Start_Date, MIN(End_Date)
+FROM 
+    (SELECT Start_Date FROM Projects WHERE Start_Date NOT IN (SELECT End_Date FROM Projects)) a,
+    (SELECT End_Date FROM Projects WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) b 
+WHERE Start_Date < End_Date
+GROUP BY Start_Date
+ORDER BY DATEDIFF(MIN(End_Date), Start_Date) ASC, Start_Date ASC;
+
+#https://www.hackerrank.com/challenges/placements/problem?h_r=next-challenge&h_v=zen
+SELECT 
+    s.name
+FROM
+    friends f
+        LEFT JOIN
+    packages p ON f.id = p.id
+        LEFT JOIN
+    packages p2 ON f.friend_id = p2.id
+        LEFT JOIN
+    students s ON f.id = s.id
+WHERE
+    p2.salary > p.salary
+ORDER BY p2.salary
+
+
+#https://www.hackerrank.com/challenges/symmetric-pairs/problem
+SELECT f1.X, f1.Y FROM Functions f1
+INNER JOIN Functions f2 ON f1.X=f2.Y AND f1.Y=f2.X
+GROUP BY f1.X, f1.Y
+HAVING COUNT(f1.X)>1 or f1.X<f1.Y
+ORDER BY f1.X 
