@@ -215,3 +215,7 @@ INNER JOIN Functions f2 ON f1.X=f2.Y AND f1.Y=f2.X
 GROUP BY f1.X, f1.Y
 HAVING COUNT(f1.X)>1 or f1.X<f1.Y
 ORDER BY f1.X 
+
+
+#https://www.hackerrank.com/challenges/weather-observation-station-15/problem
+select round(long_w,4) from station where lat_n = (select max(lat_n) from station where lat_n < 137.2345 )
