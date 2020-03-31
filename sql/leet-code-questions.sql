@@ -219,3 +219,20 @@ ORDER BY f1.X
 
 #https://www.hackerrank.com/challenges/weather-observation-station-15/problem
 select round(long_w,4) from station where lat_n = (select max(lat_n) from station where lat_n < 137.2345 )
+
+#https://www.hackerrank.com/challenges/contest-leaderboard/problem
+
+SELECT 
+    h.hacker_id, name, SUM(score) as total_score
+FROM
+    hackers h
+        LEFT JOIN
+    (SELECT 
+        hacker_id,challenge_id, max(score) as score
+    FROM
+        submissions
+    GROUP BY hacker_id, challenge_id) AS a ON h.hacker_id = a.hacker_id
+GROUP BY h.hacker_id,name
+HAVING 
+    total_score > 0
+ORDER BY total_score DESC, hacker_id;
